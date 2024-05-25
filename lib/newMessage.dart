@@ -31,6 +31,7 @@ class _NewMessageState extends State<NewMessage> {
         Expanded(
             child: TextField(
           controller: _controller,
+          maxLines: null,
           decoration: InputDecoration(labelText: 'send a message'),
           onChanged: (value) {
             setState(() {
