@@ -18,10 +18,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 200),
-            child: Image.asset("assets/logo.png"),
-          ),
+         
           Padding(
             padding: const EdgeInsets.only(top: 50, bottom: 20),
             child: InkWell(
@@ -37,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Container(
                   height: 80,
-                  child: Image.asset('assets/googlesingin.png'),
+                  child: Icon(Icons.login)
                 ),
               ),
             ),
