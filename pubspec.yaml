@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.17.8
   google_sign_in: ^6.2.1
   cloud_firestore: ^4.15.8
+  time_scheduler_table: ^1.0.0
 
 dev_dependencies:
   flutter_test:

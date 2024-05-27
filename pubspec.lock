@@ -333,6 +333,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  time_scheduler_table:
+    dependency: "direct main"
+    description:
+      name: time_scheduler_table
+      sha256: "9c0da6c073c9346767e3ba1cb9b853575456c6f749652cf5e70532264a7f4ee4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
