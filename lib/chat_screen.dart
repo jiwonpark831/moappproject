@@ -35,6 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*
       appBar: AppBar(title: Text('Chat Screen'), actions: [
         IconButton(
             onPressed: () {
@@ -43,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
               
             },
             icon: Icon(Icons.exit_to_app_sharp))
-      ]),
+      ]),*/
       body: Container(
         child: Column(
           children: [Expanded(child: Messages()), NewMessage()],
