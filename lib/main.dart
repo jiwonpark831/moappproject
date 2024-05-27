@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'MainScreen.dart';
 import 'firebase_options.dart';
 
 import 'login.dart';
@@ -17,9 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Moappfinal_seodangol',
-        initialRoute: '/login',
+        initialRoute: '/main',
         routes: {
           '/login': (BuildContext context) => LoginPage(),
+           '/main': (BuildContext context) => MainScreenPage(),
         });
   }
 }
