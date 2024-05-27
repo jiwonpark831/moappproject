@@ -34,16 +34,16 @@ class _MainScreenPageState extends State<MainScreenPage> {
       bottomNavigationBar: BottomNavigationBar(
                type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'friend'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'message'),
-           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'setting'),
+          BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: 'home'),
+           BottomNavigationBarItem(icon: Icon(Icons.people, size: 30,), label: 'friend'),
+          BottomNavigationBarItem(icon: Icon(Icons.message, size: 30,), label: 'message'),
+           BottomNavigationBarItem(icon: Icon(Icons.settings, size: 30,), label: 'setting'),
         ],
-         //selectedIconTheme: IconThemeData(color: Colors.black),
-        //  selectedLabelStyle: b13,
-         // unselectedLabelStyle: IconThemeData(color: Colors.black),
+
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedIconTheme: IconThemeData(color: Colors.black),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       ),
     );
   }
