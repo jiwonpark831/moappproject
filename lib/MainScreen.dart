@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "chat_screen.dart";
 import "home.dart";
 import "setting.dart";
+import "friend.dart";
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({super.key});
@@ -22,7 +23,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
 
   final List<Widget> _pages = [
     HomePage(),
-    //FriendPage(),
+    FriendPage(),
     ChatScreen(),
     SettingPage(),
   ];
@@ -31,8 +32,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
     return Scaffold(
       body: _pages.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+               type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'friend'),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'message'),
            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'setting'),
         ],
