@@ -10,6 +10,8 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("a"),);
+    return Scaffold(
+      body: Center(child: Text("a")),
+    );
   }
 }
