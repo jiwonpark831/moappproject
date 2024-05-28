@@ -68,7 +68,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar( 
-        title: const Text('Profile'),
+        title: const Text('Edit'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -92,6 +92,20 @@ class _SettingPageState extends State<SettingPage> {
               //   'modified_time': FieldValue.serverTimestamp(),
               //   'likeList': List<String>.from([])
               // });
+
+
+                    // name: document.data()['name'] as String,
+                    // gender: document.data()['gender'] as String,
+                    // major: document.data()['major'] as String,
+                    // birth: document.data()['birth'] as String,
+                    // status: document.data()['status'] as String,
+                    // uid: document.data()['uid'] as String,
+                    // imageURL: document.data()['imageURL'] as String,
+                    // tagCheck: List.from(document.data()['tagCheck']),
+                    // isGonggang: document.data()['isGonggang'] as bool,
+                    // schedule: document.data()['schedule'] as String,
+                    // friendList: List.from(document.data()['friendList']),
+                    // groupList: List.from(document.data()['groupList'])
 
               // debugPrint('$name / $price / $description / ${image!.path} / $_url');
               

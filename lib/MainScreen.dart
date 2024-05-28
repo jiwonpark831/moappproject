@@ -2,8 +2,9 @@ import "package:flutter/material.dart";
 
 import "chat_screen.dart";
 import "home.dart";
-import "setting.dart";
+import "profile.dart";
 import "friend.dart";
+
 
 class MainScreenPage extends StatefulWidget {
   const MainScreenPage({super.key});
@@ -25,7 +26,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
     HomePage(),
     FriendPage(),
     ChatScreen(),
-    SettingPage(),
+    ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {

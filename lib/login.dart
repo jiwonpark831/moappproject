@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,6 +30,14 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => MainScreenPage()),
                   );
+                }
+                else{
+                  FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .set(<String, dynamic>{
+                    'uid': FirebaseAuth.instance.currentUser!.uid,
+                  });
                 }
               },
               child: Center(
