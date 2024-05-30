@@ -41,7 +41,7 @@ class ApplicationState extends ChangeNotifier {
   // }
 
   Future<void> toggleGonggang()async {
-    debugPrint('${currentuser?.isGonggang}');
+    // debugPrint('${currentuser?.isGonggang}');
   }
 
   Future<void> init() async {
@@ -59,18 +59,20 @@ class ApplicationState extends ChangeNotifier {
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots()
       .listen((snapshot) {
-      if (snapshot.data()!['name'] != null
-      && snapshot.data()!['gender'] != null
-      && snapshot.data()!['major'] != null
-      && snapshot.data()!['birth'] != null
-      && snapshot.data()!['status'] != null
-      && snapshot.data()!['uid'] != null
-      && snapshot.data()!['imageURL'] != null
-      && snapshot.data()!['tagCheck'] != null
-      && snapshot.data()!['isGonggang'] != null
-      && snapshot.data()!['schedule'] != null
-      && snapshot.data()!['friendsList'] != null
-      && snapshot.data()!['groupList'] != null){
+      // if (snapshot.data()!['name'] != null
+      // && snapshot.data()!['gender'] != null
+      // && snapshot.data()!['major'] != null
+      // && snapshot.data()!['birth'] != null
+      // && snapshot.data()!['status'] != null
+      // && snapshot.data()!['uid'] != null
+      // && snapshot.data()!['imageURL'] != null
+      // && snapshot.data()!['tagCheck'] != null
+      // && snapshot.data()!['isGonggang'] != null
+      // && snapshot.data()!['schedule'] != null
+      // && snapshot.data()!['friendsList'] != null
+      // && snapshot.data()!['groupList'] != null){
+        // debugPrint('${snapshot.data()!['schedule']}');
+        // debugPrint('${currentuser!.schedule}');
         currentuser=
           CurrentUser(
             name: snapshot.data()!['name'] as String,
@@ -82,16 +84,17 @@ class ApplicationState extends ChangeNotifier {
             imageURL: snapshot.data()!['imageURL'] as String,
             tagCheck: List.from(snapshot.data()!['tagCheck']),
             isGonggang: snapshot.data()!['isGonggang'] as bool,
-            schedule: snapshot.data()!['schedule'] as String,
+            schedule: List.from(snapshot.data()!['schedule']),
+            // schedule: ['asdf'],
             friendList: List.from(snapshot.data()!['friendsList']),
             groupList: List.from(snapshot.data()!['groupList'])
           );
-      }
+      // }
       notifyListeners();
     });
 
     FirebaseAuth.instance.userChanges().listen((user) async {
-      debugPrint(FirebaseAuth.instance.currentUser!.uid);
+      // debugPrint(FirebaseAuth.instance.currentUser!.uid);
       if (user != null) {
         _loggedIn = true;
         _userSubscription = await FirebaseFirestore.instance
@@ -99,18 +102,18 @@ class ApplicationState extends ChangeNotifier {
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .snapshots()
             .listen((snapshot) {
-            if (snapshot.data()?['name'] != null
-            && snapshot.data()?['gender'] != null
-            && snapshot.data()?['major'] != null
-            && snapshot.data()?['birth'] != null
-            && snapshot.data()?['status'] != null
-            && snapshot.data()?['uid'] != null
-            && snapshot.data()?['imageURL'] != null
-            && snapshot.data()?['tagCheck'] != null
-            && snapshot.data()?['isGonggang'] != null
-            && snapshot.data()?['schedule'] != null
-            && snapshot.data()?['friendsList'] != null
-            && snapshot.data()?['groupList'] != null){
+            // if (snapshot.data()?['name'] != null
+            // && snapshot.data()?['gender'] != null
+            // && snapshot.data()?['major'] != null
+            // && snapshot.data()?['birth'] != null
+            // && snapshot.data()?['status'] != null
+            // && snapshot.data()?['uid'] != null
+            // && snapshot.data()?['imageURL'] != null
+            // && snapshot.data()?['tagCheck'] != null
+            // && snapshot.data()?['isGonggang'] != null
+            // && snapshot.data()?['schedule'] != null
+            // && snapshot.data()?['friendsList'] != null
+            // && snapshot.data()?['groupList'] != null){
               currentuser=
                 CurrentUser(
                   name: snapshot.data()!['name'] as String,
@@ -122,11 +125,11 @@ class ApplicationState extends ChangeNotifier {
                   imageURL: snapshot.data()!['imageURL'] as String,
                   tagCheck: List.from(snapshot.data()!['tagCheck']),
                   isGonggang: snapshot.data()!['isGonggang'] as bool,
-                  schedule: snapshot.data()!['schedule'] as String,
+                  schedule: List.from(snapshot.data()!['schedule']),
                   friendList: List.from(snapshot.data()!['friendsList']),
                   groupList: List.from(snapshot.data()!['groupList'])
                 );
-            }
+            // }
           
           notifyListeners();
         });

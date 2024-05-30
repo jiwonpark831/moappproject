@@ -20,10 +20,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
   _ProfilePageState();
-  final _nameController = TextEditingController();
-  final _genderController = TextEditingController();
-  final _priceController = TextEditingController();
-
   // String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
 
   String? name;
@@ -32,43 +28,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final ImagePicker imagePicker = ImagePicker();
 
-  Future getImage(ImageSource imageSource) async {
-    final XFile? pickedFile = await imagePicker.pickImage(source: imageSource);
-    if (pickedFile != null) {
-      setState(() {
-        image = XFile(pickedFile.path);
-        // imagePath=image!.path;
-      });
-    }
-  }
-
-  Widget _buildPhotoArea() {
-    return image != null
+  Widget _buildPhotoArea(String imagepath) {
+    return imagepath != null
         ? ClipOval(
             child: Container(
             height: 300,
-            child: Image.file(File(image!.path)),
+            // child: Image.file(File(image!.path)),
+                child: Image.network(imagepath)
           ))
         : ClipOval(
             child: Container(
                 height: 300,
                 child: Image.network(
                     'http://handong.edu/site/handong/res/img/logo.png')));
-  }
-
-  Widget _buildButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            getImage(ImageSource.gallery);
-          },
-          child: Text("갤러리"),
-        ),
-      ],
-    );
   }
 
   @override
@@ -118,9 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
               children: [
                 const SizedBox(height: 30),
-                _buildPhotoArea(),
-                const SizedBox(height: 20),
-                _buildButton(),
+                _buildPhotoArea(appState.currentuser!.imageURL),
                 const SizedBox(height: 20),
                 ListTile(
                     leading: const Text('이름'),

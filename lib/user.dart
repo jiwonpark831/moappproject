@@ -16,7 +16,9 @@ class CurrentUser {
   final bool isGonggang;
 
 
-  final String schedule;
+  // final String schedule;
+  final List<dynamic> schedule;
+  // final dynamic schedule;
 
   // final Timestamp createdTime;
   // final Timestamp modifiedTime;

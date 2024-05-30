@@ -13,22 +13,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  late bool isGongGang = false;
+  late bool myisGongGang=false;
 
-  late bool tag1 = false;
-  late bool tag2 = false;
-  late bool tag3 = false;
-  late bool tag4 = false;
+  late bool mytag1=false;
+  late bool mytag2=false;
+  late bool mytag3=false;
+  late bool mytag4=false;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
-      builder: (context,appState, _){
-        // isGongGang=appState.currentuser!.isGonggang;
-        // tag1=appState.currentuser!.tagCheck[0];
-        // tag2=appState.currentuser!.tagCheck[1];
-        // tag3=appState.currentuser!.tagCheck[2];
-        // tag4=appState.currentuser!.tagCheck[3];
+      builder: (context,appState, _) {
+        if (appState.currentuser != null){
+          myisGongGang=appState.currentuser!.isGonggang;
+          mytag1=appState.currentuser!.tagCheck[0];
+          mytag2=appState.currentuser!.tagCheck[1];
+          mytag3=appState.currentuser!.tagCheck[2];
+          mytag4=appState.currentuser!.tagCheck[3];
+          debugPrint('${appState.currentuser!.schedule}');
+        }
         return Scaffold(
           body: Column(children: [
             Padding(
@@ -38,27 +41,26 @@ class _HomePageState extends State<HomePage> {
                 height: 80,
                 child: TextButton(
                   onPressed: () {
-                    setState(() async {
-                      appState.toggleGonggang();
-                      await FirebaseFirestore.instance
+                    setState(() {
+                      myisGongGang = !myisGongGang;
+                      FirebaseFirestore.instance
                           .collection('user')
                           .doc(FirebaseAuth.instance.currentUser!.uid)
                           .update(<String, dynamic>{
-                        'isGonggang' : isGongGang
+                        'isGonggang' : myisGongGang
                       });
-                      isGongGang = !isGongGang;
                     });
                   },
                   child: Text(
-                    isGongGang ? '공강' : '수업중',
+                    myisGongGang ? '공강' : '수업중',
                     style: TextStyle(
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
-                      color: Color(isGongGang ? 0xff000000 : 0xffA0A0A0),
+                      color: Color(myisGongGang ? 0xff000000 : 0xffA0A0A0),
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(isGongGang ? 0xffFFD795 : 0xffFFEAC7),
+                    backgroundColor: Color(myisGongGang ? 0xffFFD795 : 0xffFFEAC7),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
@@ -75,17 +77,23 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      tag1 = !tag1;
+                      mytag1 = !mytag1;
+                      FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update(<String, dynamic>{
+                        'tagCheck' : [mytag1,mytag2,mytag3,mytag4]
+                      });
                     });
                   },
                   child: Text(
                     "공부해요",
                     style: TextStyle(
-                      color: Color(tag1 ? 0xffFFFFFF : 0xff000000),
+                      color: Color(mytag1 ? 0xffFFFFFF : 0xff000000),
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(tag1 ? 0xffA0A0A0 : 0xffF6F6F6),
+                    backgroundColor: Color(mytag1 ? 0xffA0A0A0 : 0xffF6F6F6),
                   ),
                 ),
                 SizedBox(
@@ -94,17 +102,23 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      tag2 = !tag2;
+                      mytag2 = !mytag2;
+                      FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update(<String, dynamic>{
+                        'tagCheck' : [mytag1,mytag2,mytag3,mytag4]
+                      });
                     });
                   },
                   child: Text(
                     "밥먹어요",
                     style: TextStyle(
-                      color: Color(tag2 ? 0xffFFFFFF : 0xff000000),
+                      color: Color(mytag2 ? 0xffFFFFFF : 0xff000000),
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(tag2 ? 0xffA0A0A0 : 0xffF6F6F6),
+                    backgroundColor: Color(mytag2 ? 0xffA0A0A0 : 0xffF6F6F6),
                   ),
                 ),
                 SizedBox(
@@ -113,17 +127,23 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      tag3 = !tag3;
+                      mytag3 = !mytag3;
+                      FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update(<String, dynamic>{
+                        'tagCheck' : [mytag1,mytag2,mytag3,mytag4]
+                      });
                     });
                   },
                   child: Text(
                     "한한해요",
                     style: TextStyle(
-                      color: Color(tag3 ? 0xffFFFFFF : 0xff000000),
+                      color: Color(mytag3 ? 0xffFFFFFF : 0xff000000),
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(tag3 ? 0xffA0A0A0 : 0xffF6F6F6),
+                    backgroundColor: Color(mytag3 ? 0xffA0A0A0 : 0xffF6F6F6),
                   ),
                 ),
                 SizedBox(
@@ -132,17 +152,23 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      tag4 = !tag4;
+                      mytag4 = !mytag4;
+                      FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update(<String, dynamic>{
+                        'tagCheck' : [mytag1,mytag2,mytag3,mytag4]
+                      });
                     });
                   },
                   child: Text(
                     "일단만나요",
                     style: TextStyle(
-                      color: Color(tag4 ? 0xffFFFFFF : 0xff000000),
+                      color: Color(mytag4 ? 0xffFFFFFF : 0xff000000),
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(tag4 ? 0xffA0A0A0 : 0xffF6F6F6),
+                    backgroundColor: Color(mytag4 ? 0xffA0A0A0 : 0xffF6F6F6),
                   ),
                 ),
               ],

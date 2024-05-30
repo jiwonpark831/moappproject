@@ -12,6 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  ApplicationState().init();
   // runApp(MyApp());
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
