@@ -24,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _genderController = TextEditingController();
   final _priceController = TextEditingController();
 
-  String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
+  // String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
   
   String? name;
   String? description;
@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (pickedFile != null) {
       setState(() {
         image = XFile(pickedFile.path); 
-        imagePath=image!.path;
+        // imagePath=image!.path;
       });
     }
   }
