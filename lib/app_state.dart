@@ -59,18 +59,18 @@ class ApplicationState extends ChangeNotifier {
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots()
       .listen((snapshot) {
-      // if (snapshot.data()!['name'] != null
-      // && snapshot.data()!['gender'] != null
-      // && snapshot.data()!['major'] != null
-      // && snapshot.data()!['birth'] != null
-      // && snapshot.data()!['status'] != null
-      // && snapshot.data()!['uid'] != null
-      // && snapshot.data()!['imageURL'] != null
-      // && snapshot.data()!['tagCheck'] != null
-      // && snapshot.data()!['isGonggang'] != null
-      // && snapshot.data()!['schedule'] != null
-      // && snapshot.data()!['friendsList'] != null
-      // && snapshot.data()!['groupList'] != null){
+      if (snapshot.data()!['name'] != null
+      && snapshot.data()!['gender'] != null
+      && snapshot.data()!['major'] != null
+      && snapshot.data()!['birth'] != null
+      && snapshot.data()!['status'] != null
+      && snapshot.data()!['uid'] != null
+      && snapshot.data()!['imageURL'] != null
+      && snapshot.data()!['tagCheck'] != null
+      && snapshot.data()!['isGonggang'] != null
+      && snapshot.data()!['schedule'] != null
+      && snapshot.data()!['friendsList'] != null
+      && snapshot.data()!['groupList'] != null){
         currentuser=
           CurrentUser(
             name: snapshot.data()!['name'] as String,
@@ -86,7 +86,7 @@ class ApplicationState extends ChangeNotifier {
             friendList: List.from(snapshot.data()!['friendsList']),
             groupList: List.from(snapshot.data()!['groupList'])
           );
-      // }
+      }
       notifyListeners();
     });
 
