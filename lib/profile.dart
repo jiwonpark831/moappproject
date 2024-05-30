@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:moappproject/setting.dart';
 
 import 'dart:io';
 
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
-                onPressed: () async {
+                onPressed: () {
                   // name=_nameController.text;
                   // price=_priceController.text;
                   // description=_descriptionController.text;
@@ -101,7 +102,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   // debugPrint('$name / $price / $description / ${image!.path} / $_url');
                   
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingPage(),
+                    ),
+                  );
                 },
               ),
             ],

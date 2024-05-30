@@ -40,16 +40,15 @@ class ApplicationState extends ChangeNotifier {
   //   }
   // }
 
-  // void addwishlist(Product product){
-  //   if (checkwishlist(product.docId)){
-  //     debugPrint('No you Can\'t');
-  //   }
-  //   else{
-  //     wishlist.add(product);
-  //     wishlistcheck.add(product.docId);
-  //   }
-  //   debugPrint('${wishlist.length}');
-  // }
+  Future<void> toggleGonggang()async {
+    // await FirebaseFirestore.instance
+    //     .collection('user')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .set(<String, dynamic>{
+    //   'isGonggang' : currentuser?.isGonggang
+    // });
+    debugPrint('${currentuser?.isGonggang}');
+  }
 
   Future<void> init() async {
     
@@ -60,6 +59,7 @@ class ApplicationState extends ChangeNotifier {
       // _attendees = snapshot.docs.length;
       notifyListeners();
     });
+
     _userSubscription = FirebaseFirestore.instance
       .collection('user')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -95,6 +95,7 @@ class ApplicationState extends ChangeNotifier {
       }
       notifyListeners();
     });
+
     FirebaseAuth.instance.userChanges().listen((user) {
       debugPrint(FirebaseAuth.instance.currentUser!.uid);
       if (user != null) {

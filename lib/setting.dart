@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,13 +19,17 @@ class _SettingPageState extends State<SettingPage> {
 
   final _nameController = TextEditingController();
   final _genderController = TextEditingController();
-  final _priceController = TextEditingController();
+  final _majorController = TextEditingController();
+  final _birthController = TextEditingController();
+  final _statusController = TextEditingController();
 
   String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
   
   String? name;
-  String? description;
-  String? price;
+  String? gender;
+  String? major;
+  String? birth;
+  String? status;
 
   final ImagePicker imagePicker = ImagePicker();
 
@@ -73,40 +79,31 @@ class _SettingPageState extends State<SettingPage> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              // name=_nameController.text;
-              // price=_priceController.text;
-              // description=_descriptionController.text;
+              name=_nameController.text;
+              gender=_genderController.text;
+              major=_majorController.text;
+              birth=_birthController.text;
+              status=_statusController.text;
 
               // File file = File(imagePath);
               // await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}_${name}_$price.jpeg').putFile(file);
               // Reference tmpref= FirebaseStorage.instance.ref().child('/${FirebaseAuth.instance.currentUser?.uid}_${name}_$price.jpeg');
               // String _url= await tmpref.getDownloadURL();
 
-              // await FirebaseFirestore.instance.collection('product').add(<String, dynamic>{
-              //   'name': name,
-              //   'price': num.parse(price!),
-              //   'url': _url,
-              //   'description': description,
-              //   'uid': FirebaseAuth.instance.currentUser!.uid,
-              //   'created_time': FieldValue.serverTimestamp(),
-              //   'modified_time': FieldValue.serverTimestamp(),
-              //   'likeList': List<String>.from([])
-              // });
-
-
-                    // name: document.data()['name'] as String,
-                    // gender: document.data()['gender'] as String,
-                    // major: document.data()['major'] as String,
-                    // birth: document.data()['birth'] as String,
-                    // status: document.data()['status'] as String,
-                    // uid: document.data()['uid'] as String,
-                    // imageURL: document.data()['imageURL'] as String,
-                    // tagCheck: List.from(document.data()['tagCheck']),
-                    // isGonggang: document.data()['isGonggang'] as bool,
-                    // schedule: document.data()['schedule'] as String,
-                    // friendList: List.from(document.data()['friendList']),
-                    // groupList: List.from(document.data()['groupList'])
-
+              await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).set(<String, dynamic>{
+                'name': name,
+                'gender': gender,
+                'major': major,
+                'birth': birth,
+                'status': status,
+                'uid': FirebaseAuth.instance.currentUser!.uid,
+                'imageURL': 'sdafasdf',
+                'tagCheck': [false,false,false,false],
+                'isGongang': false,
+                'schedule': 'this is a schedule by json format',
+                'firendsList': ['asdfasdf'],
+                'groupList': ['asdfasdf']
+              });
               // debugPrint('$name / $price / $description / ${image!.path} / $_url');
               
               Navigator.pop(context);
@@ -135,7 +132,7 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 leading: Text('성별'),
                 title:TextField(
-                  controller: _nameController,
+                  controller: _genderController,
                   decoration: const InputDecoration(
                     labelText: '남 / 여',
                   ),
@@ -144,7 +141,7 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 leading: Text('전공'),
                 title:TextField(
-                  controller: _nameController,
+                  controller: _majorController,
                   decoration: const InputDecoration(
                     labelText: 'ex) 전산전자공학부',
                   ),
@@ -153,7 +150,7 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 leading: Text('생년월일'),
                 title:TextField(
-                  controller: _nameController,
+                  controller: _birthController,
                   decoration: const InputDecoration(
                     labelText: 'ex) 2000.03.30',
                   ),
@@ -162,7 +159,7 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 leading: Text('한 줄 소개'),
                 title:TextField(
-                  controller: _nameController,
+                  controller: _statusController,
                   decoration: const InputDecoration(
                     labelText: '나는 공강을 사랑합니다.',
                   ),
