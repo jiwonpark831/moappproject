@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _priceController = TextEditingController();
 
   // String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
-  
+
   String? name;
   String? description;
   String? price;
@@ -33,11 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker imagePicker = ImagePicker();
 
   Future getImage(ImageSource imageSource) async {
-    
     final XFile? pickedFile = await imagePicker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
-        image = XFile(pickedFile.path); 
+        image = XFile(pickedFile.path);
         // imagePath=image!.path;
       });
     }
@@ -46,15 +45,17 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildPhotoArea() {
     return image != null
         ? ClipOval(
-          child: Container(
+            child: Container(
             height: 300,
             child: Image.file(File(image!.path)),
           ))
-        : ClipOval(child: Container(
-            height: 300,
-            child: Image.network('http://handong.edu/site/handong/res/img/logo.png')
-          ));
+        : ClipOval(
+            child: Container(
+                height: 300,
+                child: Image.network(
+                    'http://handong.edu/site/handong/res/img/logo.png')));
   }
+
   Widget _buildButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,12 +70,12 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ApplicationState>(
-      builder: (context,appState, _){
-        return Scaffold(
-          appBar: AppBar( 
+    return Consumer<ApplicationState>(builder: (context, appState, _) {
+      return Scaffold(
+          appBar: AppBar(
             title: const Text('Profile'),
             actions: [
               IconButton(
@@ -101,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   // });
 
                   // debugPrint('$name / $price / $description / ${image!.path} / $_url');
-                  
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -114,55 +115,48 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           body: Center(
             child: SingleChildScrollView(
-              child:Column(
-                children: [
-                  const SizedBox(height: 30),
-                  _buildPhotoArea(),
-                  const SizedBox(height: 20),
-                  _buildButton(),
-                  const SizedBox(height: 20),
-                  ListTile(
+                child: Column(
+              children: [
+                const SizedBox(height: 30),
+                _buildPhotoArea(),
+                const SizedBox(height: 20),
+                _buildButton(),
+                const SizedBox(height: 20),
+                ListTile(
                     leading: const Text('이름'),
-                    title: Text(appState.currentuser!.name)
-                    
-                  ),
-                  ListTile(
+                    title: Text(appState.currentuser!.name)),
+                ListTile(
                     leading: Text('성별'),
-                    title: Text(appState.currentuser!.gender)
-                  ),
-                  ListTile(
+                    title: Text(appState.currentuser!.gender)),
+                ListTile(
                     leading: Text('전공'),
-                    title: Text(appState.currentuser!.major)
-                  ),
-                  ListTile(
+                    title: Text(appState.currentuser!.major)),
+                ListTile(
                     leading: Text('생년월일'),
-                    title: Text(appState.currentuser!.birth)
-                  ),
-                  ListTile(
+                    title: Text(appState.currentuser!.birth)),
+                ListTile(
                     leading: Text('한 줄 소개'),
-                    title: Text(appState.currentuser!.status)
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.calendar_month_outlined),
-                    onPressed:() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TimeTablePage(),
-                        ),
-                      );
-                    },
-                  ),
-                  TextButton(child: Text('log out'),
-                  onPressed: (){
+                    title: Text(appState.currentuser!.status)),
+                IconButton(
+                  icon: const Icon(Icons.calendar_month_outlined),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TimeTablePage(),
+                      ),
+                    );
+                  },
+                ),
+                TextButton(
+                  child: Text('log out'),
+                  onPressed: () {
                     debugPrint('log out');
-                  },)
-                ],
-              )
-            ),
-          )
-        );
-      }
-    );
+                  },
+                )
+              ],
+            )),
+          ));
+    });
   }
 }

@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:moappproject/chatroom.dart";
+import "package:moappproject/setting.dart";
 
 import "chat_screen.dart";
 import "home.dart";
@@ -25,7 +27,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
   final List<Widget> _pages = [
     HomePage(),
     FriendPage(),
-    ChatScreen(),
+    //ChatScreen(),
+    ChatroomPage(),
     ProfilePage(),
   ];
   @override

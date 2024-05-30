@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble(this.message, this.isMe, {super.key});
-
   final String message;
   final bool isMe;
+
+  ChatBubble(this.message, this.isMe);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,14 @@ class ChatBubble extends StatelessWidget {
             style: TextStyle(color: isMe ? Colors.black : Colors.white),
           ),
           decoration: BoxDecoration(
-              color: isMe ? Colors.grey[300] : Colors.blue,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-                bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
-                bottomLeft: isMe ? Radius.circular(12) : Radius.circular(0),
-              )),
+            color: isMe ? Colors.grey[300] : Colors.blue,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
+              bottomLeft: isMe ? Radius.circular(12) : Radius.circular(0),
+            ),
+          ),
         ),
       ],
     );
