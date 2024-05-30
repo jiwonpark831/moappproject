@@ -99,9 +99,9 @@ class _SettingPageState extends State<SettingPage> {
                 'uid': FirebaseAuth.instance.currentUser!.uid,
                 'imageURL': 'sdafasdf',
                 'tagCheck': [false,false,false,false],
-                'isGongang': false,
+                'isGonggang': false,
                 'schedule': 'this is a schedule by json format',
-                'firendsList': ['asdfasdf'],
+                'friendsList': ['asdfasdf'],
                 'groupList': ['asdfasdf']
               });
               // debugPrint('$name / $price / $description / ${image!.path} / $_url');

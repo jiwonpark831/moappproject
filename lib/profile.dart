@@ -124,6 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: const Text('이름'),
                     title: Text(appState.currentuser!.name)
+                    
                   ),
                   ListTile(
                     leading: Text('성별'),

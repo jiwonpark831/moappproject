@@ -41,12 +41,6 @@ class ApplicationState extends ChangeNotifier {
   // }
 
   Future<void> toggleGonggang()async {
-    // await FirebaseFirestore.instance
-    //     .collection('user')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .set(<String, dynamic>{
-    //   'isGonggang' : currentuser?.isGonggang
-    // });
     debugPrint('${currentuser?.isGonggang}');
   }
 
@@ -60,23 +54,23 @@ class ApplicationState extends ChangeNotifier {
       notifyListeners();
     });
 
-    _userSubscription = FirebaseFirestore.instance
+    _userSubscription = await FirebaseFirestore.instance
       .collection('user')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots()
       .listen((snapshot) {
-      if (snapshot.data()!['name'] != null
-      && snapshot.data()!['gender'] != null
-      && snapshot.data()!['major'] != null
-      && snapshot.data()!['birth'] != null
-      && snapshot.data()!['status'] != null
-      && snapshot.data()!['uid'] != null
-      && snapshot.data()!['imageURL'] != null
-      && snapshot.data()!['tagCheck'] != null
-      && snapshot.data()!['isGonggang'] != null
-      && snapshot.data()!['schedule'] != null
-      && snapshot.data()!['friendList'] != null
-      && snapshot.data()!['groupList'] != null){
+      // if (snapshot.data()!['name'] != null
+      // && snapshot.data()!['gender'] != null
+      // && snapshot.data()!['major'] != null
+      // && snapshot.data()!['birth'] != null
+      // && snapshot.data()!['status'] != null
+      // && snapshot.data()!['uid'] != null
+      // && snapshot.data()!['imageURL'] != null
+      // && snapshot.data()!['tagCheck'] != null
+      // && snapshot.data()!['isGonggang'] != null
+      // && snapshot.data()!['schedule'] != null
+      // && snapshot.data()!['friendsList'] != null
+      // && snapshot.data()!['groupList'] != null){
         currentuser=
           CurrentUser(
             name: snapshot.data()!['name'] as String,
@@ -89,18 +83,18 @@ class ApplicationState extends ChangeNotifier {
             tagCheck: List.from(snapshot.data()!['tagCheck']),
             isGonggang: snapshot.data()!['isGonggang'] as bool,
             schedule: snapshot.data()!['schedule'] as String,
-            friendList: List.from(snapshot.data()!['friendList']),
+            friendList: List.from(snapshot.data()!['friendsList']),
             groupList: List.from(snapshot.data()!['groupList'])
           );
-      }
+      // }
       notifyListeners();
     });
 
-    FirebaseAuth.instance.userChanges().listen((user) {
+    FirebaseAuth.instance.userChanges().listen((user) async {
       debugPrint(FirebaseAuth.instance.currentUser!.uid);
       if (user != null) {
         _loggedIn = true;
-        _userSubscription = FirebaseFirestore.instance
+        _userSubscription = await FirebaseFirestore.instance
             .collection('user')
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .snapshots()
@@ -115,7 +109,7 @@ class ApplicationState extends ChangeNotifier {
             && snapshot.data()?['tagCheck'] != null
             && snapshot.data()?['isGonggang'] != null
             && snapshot.data()?['schedule'] != null
-            && snapshot.data()?['friendList'] != null
+            && snapshot.data()?['friendsList'] != null
             && snapshot.data()?['groupList'] != null){
               currentuser=
                 CurrentUser(
@@ -129,7 +123,7 @@ class ApplicationState extends ChangeNotifier {
                   tagCheck: List.from(snapshot.data()!['tagCheck']),
                   isGonggang: snapshot.data()!['isGonggang'] as bool,
                   schedule: snapshot.data()!['schedule'] as String,
-                  friendList: List.from(snapshot.data()!['friendList']),
+                  friendList: List.from(snapshot.data()!['friendsList']),
                   groupList: List.from(snapshot.data()!['groupList'])
                 );
             }

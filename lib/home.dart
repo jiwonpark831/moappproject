@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app_state.dart';
@@ -22,6 +24,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context,appState, _){
+        // isGongGang=appState.currentuser!.isGonggang;
+        // tag1=appState.currentuser!.tagCheck[0];
+        // tag2=appState.currentuser!.tagCheck[1];
+        // tag3=appState.currentuser!.tagCheck[2];
+        // tag4=appState.currentuser!.tagCheck[3];
         return Scaffold(
           body: Column(children: [
             Padding(
@@ -31,9 +38,15 @@ class _HomePageState extends State<HomePage> {
                 height: 80,
                 child: TextButton(
                   onPressed: () {
-                    setState(() {
-                      isGongGang = !isGongGang;
+                    setState(() async {
                       appState.toggleGonggang();
+                      await FirebaseFirestore.instance
+                          .collection('user')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update(<String, dynamic>{
+                        'isGonggang' : isGongGang
+                      });
+                      isGongGang = !isGongGang;
                     });
                   },
                   child: Text(
