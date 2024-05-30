@@ -20,7 +20,7 @@ class _EachChatroomState extends State<EachChatroom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with ${widget.friendUid}'),
+        title: Text('${widget.friendUid}'),
       ),
       body: Column(
         children: [
