@@ -35,6 +35,13 @@ class _ChatroomPageState extends State<ChatroomPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '내 채팅',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: false,
+      ),
       body: ListView.builder(
         itemCount: chatroomNames.length,
         itemBuilder: (context, index) {
@@ -57,8 +64,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          EachChatroom(chatroomNames[index]),
+                      builder: (context) => EachChatroom(chatroomNames[index]),
                     ),
                   );
                 },

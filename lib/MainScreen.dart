@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:moappproject/chatroom.dart";
 import "package:moappproject/setting.dart";
 
-import "chat_screen.dart";
 import "home.dart";
 import "profile.dart";
 import "friend.dart";

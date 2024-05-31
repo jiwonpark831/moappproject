@@ -16,39 +16,28 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-         
-          Padding(
-            padding: const EdgeInsets.only(top: 50, bottom: 20),
-            child: InkWell(
-              onTap: () async {
-                UserCredential userCredential = await signInWithGoogle();
-
-                if (userCredential != null) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MainScreenPage()),
-                  );
-                }
-                else{
-                  FirebaseFirestore.instance
-                      .collection('user')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .set(<String, dynamic>{
-                    'uid': FirebaseAuth.instance.currentUser!.uid,
-                  });
-                }
-              },
-              child: Center(
-                child: Container(
-                  height: 80,
-                  child: Icon(Icons.login)
-                ),
-              ),
-            ),
+      body: Center(
+        child: IconButton(
+          onPressed: () async {
+            UserCredential userCredential = await signInWithGoogle();
+            if (userCredential != null) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MainScreenPage()),
+              );
+            } else {
+              FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .set(<String, dynamic>{
+                'uid': FirebaseAuth.instance.currentUser!.uid,
+              });
+            }
+          },
+          icon: Image.asset(
+            'assets/googlesingin.png',
+            height: 80,
           ),
-        ],
+        ),
       ),
     );
   }

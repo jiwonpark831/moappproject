@@ -43,14 +43,15 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
+      width: 380,
+      margin: EdgeInsets.only(top: 10, bottom: 15, left: 20),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _controller,
               maxLines: null,
-              decoration: InputDecoration(labelText: 'Send a message'),
+              decoration: InputDecoration(hintText: '메세지를 입력하세요'),
               onChanged: (value) {
                 setState(() {
                   _userEnterMessage = value;
@@ -61,7 +62,7 @@ class _NewMessageState extends State<NewMessage> {
           IconButton(
             onPressed: _userEnterMessage.trim().isEmpty ? null : _sendMessage,
             icon: Icon(Icons.send),
-            color: Colors.blue,
+            color: Colors.black,
           )
         ],
       ),

@@ -1,14 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:moappproject/login.dart';
 import 'package:moappproject/setting.dart';
-
-import 'dart:io';
+import 'package:moappproject/timetable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:time_scheduler_table/time_scheduler_table.dart';
 
 import 'app_state.dart';
-
 import 'package:provider/provider.dart';
-
-import 'package:moappproject/timetable.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,23 +20,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
   _ProfilePageState();
-  // String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
-
-  String? name;
-  String? description;
-  String? price;
 
   final ImagePicker imagePicker = ImagePicker();
 
   Widget _buildPhotoArea(String imagepath) {
     return imagepath != null
         ? ClipOval(
-            child: Container(
-            height: 300,
-            // child: Image.file(File(image!.path)),
-                child: Image.network(imagepath)
-          ))
+            clipper: MyClipper(),
+            child: Container(height: 300, child: Image.network(imagepath)))
         : ClipOval(
+            clipper: MyClipper(),
             child: Container(
                 height: 300,
                 child: Image.network(
@@ -51,38 +44,14 @@ class _ProfilePageState extends State<ProfilePage> {
             title: const Text('Profile'),
             actions: [
               IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  // name=_nameController.text;
-                  // price=_priceController.text;
-                  // description=_descriptionController.text;
-
-                  // File file = File(imagePath);
-                  // await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}_${name}_$price.jpeg').putFile(file);
-                  // Reference tmpref= FirebaseStorage.instance.ref().child('/${FirebaseAuth.instance.currentUser?.uid}_${name}_$price.jpeg');
-                  // String _url= await tmpref.getDownloadURL();
-
-                  // await FirebaseFirestore.instance.collection('product').add(<String, dynamic>{
-                  //   'name': name,
-                  //   'price': num.parse(price!),
-                  //   'url': _url,
-                  //   'description': description,
-                  //   'uid': FirebaseAuth.instance.currentUser!.uid,
-                  //   'created_time': FieldValue.serverTimestamp(),
-                  //   'modified_time': FieldValue.serverTimestamp(),
-                  //   'likeList': List<String>.from([])
-                  // });
-
-                  // debugPrint('$name / $price / $description / ${image!.path} / $_url');
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingPage(),
-                    ),
-                  );
-                },
-              ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingPage(),
+                        ));
+                  },
+                  icon: Icon(Icons.edit))
             ],
           ),
           body: Center(
@@ -107,9 +76,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ListTile(
                     leading: Text('한 줄 소개'),
                     title: Text(appState.currentuser!.status)),
-                IconButton(
-                  icon: const Icon(Icons.calendar_month_outlined),
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -117,16 +85,77 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     );
                   },
+                  child: Container(
+                    child: _TimetablePreview(appState.currentuser!.schedule),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
                 ),
                 TextButton(
-                  child: Text('log out'),
-                  onPressed: () {
-                    debugPrint('log out');
+                  child: Text('로그아웃'),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
                   },
                 )
               ],
             )),
           ));
     });
+  }
+
+  Widget _TimetablePreview(List<dynamic> schedule) {
+    List<EventModel> eventList = [];
+    schedule.forEach((element) {
+      eventList.add(EventModel(
+        title: element['content'],
+        columnIndex: element['time']['column'],
+        rowIndex: element['time']['row'],
+        color: Color(element['color']),
+      ));
+    });
+
+    return Container(
+      width: 400,
+      height: 500,
+      child: TimeSchedulerTable(
+        cellHeight: 40,
+        cellWidth: 56,
+        columnTitles: const ["Mon", "Tue", "Wed", "Thur", "Fri"],
+        rowTitles: const [
+          '1교시',
+          '2교시',
+          '3교시',
+          '4교시',
+          '5교시',
+          '6교시',
+          '7교시',
+          '8교시',
+          '9교시',
+          '10교시',
+        ],
+        eventList: eventList,
+        isBack: false,
+        eventAlert: EventAlert(
+          alertTextController: TextEditingController(),
+        ),
+      ),
+    );
+  }
+}
+
+class MyClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTRB(0, 0, 300, 300);
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return false;
   }
 }
