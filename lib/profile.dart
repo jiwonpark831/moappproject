@@ -6,6 +6,7 @@ import 'package:moappproject/setting.dart';
 import 'package:moappproject/timetable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:time_scheduler_table/time_scheduler_table.dart';
+import 'package:flutter/services.dart';
 
 import 'app_state.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildPhotoArea(String imagepath) {
     return imagepath != null
         ? ClipOval(
-            clipper: MyClipper(),
-            child: Container(height: 300, child: Image.network(imagepath)))
+              clipper: MyClipper(),
+              child: Container(height: 300, child: Image.network(imagepath)))
         : ClipOval(
             clipper: MyClipper(),
             child: Container(
@@ -76,20 +77,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ListTile(
                     leading: Text('한 줄 소개'),
                     title: Text(appState.currentuser!.status)),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TimeTablePage(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    child: _TimetablePreview(appState.currentuser!.schedule),
+                ListTile(
+                    leading: Text('UID'),
+                    title: Text(appState.currentuser!.uid,style: TextStyle(fontSize: 15)),
+                    trailing: IconButton(icon:Icon(Icons.copy),onPressed:((){Clipboard.setData(ClipboardData(text: appState.currentuser!.uid)); })),
                   ),
+                    
+                Container(
+                  child: _TimetablePreview(appState.currentuser!.schedule),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 TextButton(
@@ -119,7 +116,8 @@ class _ProfilePageState extends State<ProfilePage> {
       ));
     });
 
-    return Container(
+    return AbsorbPointer(absorbing: true, child:
+    Container(
       width: 400,
       height: 500,
       child: TimeSchedulerTable(
@@ -144,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
           alertTextController: TextEditingController(),
         ),
       ),
-    );
+    ));
   }
 }
 

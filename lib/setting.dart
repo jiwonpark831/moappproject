@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:moappproject/timetable.dart';
 import 'package:provider/provider.dart';
+import 'package:time_scheduler_table/time_scheduler_table.dart';
 
 import 'app_state.dart';
 
@@ -26,6 +27,10 @@ class _SettingPageState extends State<SettingPage> {
   final _majorController = TextEditingController();
   final _birthController = TextEditingController();
   final _statusController = TextEditingController();
+
+
+  List<EventModel> userSchedule = [];
+  List<dynamic>? newuserSchedule=[];
 
   String imagePath ='/Users/sw/Desktop/MAD/finalterm/assets/logo.png';
   
@@ -75,6 +80,46 @@ class _SettingPageState extends State<SettingPage> {
       ],
     );
   }
+
+  Widget _TimetablePreview(List<dynamic> schedule) {
+    schedule.forEach((element) {
+      userSchedule.add(EventModel(
+        title: element['content'],
+        columnIndex: element['time']['column'],
+        rowIndex: element['time']['row'],
+        color: Color(element['color']),
+      ));
+    });
+
+    return Container(
+      width: 400,
+      height: 500,
+      child: TimeSchedulerTable(
+        cellHeight: 40,
+        cellWidth: 56,
+        columnTitles: const ["Mon", "Tue", "Wed", "Thur", "Fri"],
+        rowTitles: const [
+          '1교시',
+          '2교시',
+          '3교시',
+          '4교시',
+          '5교시',
+          '6교시',
+          '7교시',
+          '8교시',
+          '9교시',
+          '10교시',
+        ],
+        eventList: userSchedule,
+        isBack: false,
+        eventAlert: EventAlert(
+          alertTextController: TextEditingController(),
+        ),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
@@ -90,6 +135,23 @@ class _SettingPageState extends State<SettingPage> {
                 major=_majorController.text;
                 birth=_birthController.text;
                 status=_statusController.text;
+                
+                userSchedule.forEach((element) {
+                Map tmp={};
+                tmp['content']=element.title;
+                Map time={};
+                time['row']=element.rowIndex;
+                time['column']=element.columnIndex;
+                tmp['time']=time;
+                tmp['color']=element.color!.value;
+                newuserSchedule!.add(tmp);
+              });
+              FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .update(<String, dynamic>{
+                'schedule' : newuserSchedule
+              });
 
                 File file = File(imagePath);
                 await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}.jpeg').putFile(file);
@@ -176,16 +238,8 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.calendar_month_outlined),
-                  onPressed:() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TimeTablePage(),
-                      ),
-                    );
-                  },
+                Container(
+                  child: _TimetablePreview(appState.currentuser!.schedule),
                 ),
                 TextButton(child: Text('log out'),
                 onPressed: (){
