@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   late bool mytag3 = false;
   late bool mytag4 = false;
   List<String> friendList = [];
+
   @override
   void initState() {
     super.initState();
@@ -205,14 +206,83 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             width: 400,
-            height: 125,
+            height: 150,
             decoration: BoxDecoration(color: Color(0xffCCF9EE)),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: friendList.length,
               itemBuilder: (context, index) {
-                return Card(
-                  child: Container(width: 100, child: Text(friendList[index])),
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(friendList[index])
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      var userData = snapshot.data!;
+                      bool isFriendGonggang = userData['isGonggang'] ?? false;
+                      List<bool> friendTagCheck =
+                          List<bool>.from(userData['tagCheck']);
+                      bool showCard =
+                          isFriendGonggang || friendTagCheck.contains(true);
+                      if (showCard) {
+                        return Card(
+                          elevation: 0,
+                          child: Container(
+                            color: Color(0xffCCF9EE),
+                            width: 150,
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage:
+                                      NetworkImage(userData['imageURL']),
+                                ),
+                                SizedBox(height: 8.0),
+                                Text(
+                                  userData['name'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    if (friendTagCheck[0])
+                                      Container(
+                                        child: Text("#공부해요"),
+                                        color: Color(0xffFFFFFF),
+                                      ),
+                                    if (friendTagCheck[1])
+                                      Container(
+                                        child: Text("#밥먹어요"),
+                                        color: Color(0xffFFFFFF),
+                                      ),
+                                    if (friendTagCheck[2])
+                                      Container(
+                                        child: Text("#한한해요"),
+                                        color: Color(0xffFFFFFF),
+                                      ),
+                                    if (friendTagCheck[3])
+                                      Container(
+                                        child: Text("#일단만나요"),
+                                        color: Color(0xffFFFFFF),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    } else {
+                      return Text(' ');
+                    }
+                  },
                 );
               },
             ),
@@ -225,21 +295,14 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 20,
           ),
-          Text(
-            '새로운 공강메이트를 찾아보세요!',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 20,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
-              SizedBox(
-                width: 15,
+              Text(
+                '새로운 공강메이트를 찾아보세요!',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.filter_list))
+              IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
             ],
           ),
           SizedBox(

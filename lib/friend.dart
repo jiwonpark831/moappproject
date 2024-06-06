@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moappproject/timetable.dart';
+import 'package:time_scheduler_table/time_scheduler_table.dart';
 
 class FriendPage extends StatefulWidget {
   const FriendPage({super.key});
@@ -32,6 +34,71 @@ class _FriendPageState extends State<FriendPage> {
     setState(() {});
   }
 
+  void showAlertDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  AddFriend() async {
+    String friendUid = _uidcontroller.text.trim();
+    if (friendUid.isEmpty) return;
+
+    String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
+    if (friendUid == currentUserUid) {
+      showAlertDialog('나는 나의 영원한 친구입니다');
+      return;
+    }
+
+    DocumentReference currentUserDoc =
+        _firestore.collection('user').doc(currentUserUid);
+    DocumentReference friendUserDoc =
+        _firestore.collection('user').doc(friendUid);
+
+    DocumentSnapshot friendUserSnapshot = await friendUserDoc.get();
+
+    if (!friendUserSnapshot.exists) {
+      showAlertDialog('uid가 존재하지 않습니다');
+      return;
+    }
+
+    if (friends.contains(friendUid)) {
+      showAlertDialog('이미 있는 친구입니다');
+      return;
+    }
+
+    await _firestore.runTransaction((transaction) async {
+      DocumentSnapshot currentUserSnapshot =
+          await transaction.get(currentUserDoc);
+      if (currentUserSnapshot.exists) {
+        transaction.update(currentUserDoc, {
+          'friendsList': FieldValue.arrayUnion([friendUid])
+        });
+        transaction.update(friendUserDoc, {
+          'friendsList': FieldValue.arrayUnion([currentUserUid])
+        });
+      }
+    });
+
+    _uidcontroller.clear();
+    getfriendList();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,32 +110,33 @@ class _FriendPageState extends State<FriendPage> {
         centerTitle: false,
         actions: [
           ElevatedButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SingleChildScrollView(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                          color: Colors.white),
+                      height: 500,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 35, left: 30),
+                            child: Text(
+                              '친구 추가',
                             ),
-                            color: Colors.white),
-                        height: 500,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 35, left: 30),
-                              child: Text(
-                                '친구 추가',
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: Center(
-                                child: Column(children: [
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Center(
+                              child: Column(
+                                children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 72),
                                     child: Container(
@@ -77,7 +145,7 @@ class _FriendPageState extends State<FriendPage> {
                                       child: TextField(
                                         controller: _uidcontroller,
                                         decoration: InputDecoration(
-                                          hintText: '친구의 uid를 입력하세요',
+                                          hintText: '친구의 UID를 입력하세요',
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5),
@@ -91,14 +159,13 @@ class _FriendPageState extends State<FriendPage> {
                                                 BorderSide(color: Colors.grey),
                                           ),
                                         ),
-                                        maxLength: 10,
                                       ),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: AddFriend,
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.white,
                                         minimumSize: const Size(250, 38),
@@ -110,17 +177,19 @@ class _FriendPageState extends State<FriendPage> {
                                       child: Text('추가'),
                                     ),
                                   ),
-                                ]),
+                                ],
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                );
-              },
-              child: Text("친구 추가"))
+                    ),
+                  );
+                },
+              );
+            },
+            child: Text("친구 추가"),
+          ),
         ],
       ),
       body: ListView.builder(
@@ -168,11 +237,142 @@ class FriendProfiles extends StatefulWidget {
 
 class _FriendProfilesState extends State<FriendProfiles> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Map<String, dynamic>? friendProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    ShowFriendProfile();
+  }
+
+  Future<void> ShowFriendProfile() async {
+    DocumentSnapshot doc =
+        await _firestore.collection('user').doc(widget.friendUid).get();
+    if (doc.exists) {
+      setState(() {
+        friendProfile = doc.data() as Map<String, dynamic>?;
+      });
+    }
+  }
+
+  Widget _ProfilePic(String? imageurl) {
+    return imageurl != null
+        ? ClipOval(
+            clipper: MyClipper(),
+            child: Container(height: 300, child: Image.network(imageurl)))
+        : ClipOval(
+            clipper: MyClipper(),
+            child: Container(
+                height: 300,
+                child: Image.network(
+                    'http://handong.edu/site/handong/res/img/logo.png')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: Text('${widget.friendUid}'),
-    ));
+      appBar: AppBar(
+        title: Text('Friend Profile'),
+      ),
+      body: friendProfile == null
+          ? Center(child: CircularProgressIndicator())
+          : Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    _ProfilePic(friendProfile!['imageURL']),
+                    const SizedBox(height: 20),
+                    ListTile(
+                        leading: const Text('이름'),
+                        title: Text(friendProfile!['name'])),
+                    ListTile(
+                        leading: Text('성별'),
+                        title: Text(friendProfile!['gender'])),
+                    ListTile(
+                        leading: Text('전공'),
+                        title: Text(friendProfile!['major'])),
+                    ListTile(
+                        leading: Text('생년월일'),
+                        title: Text(friendProfile!['birth'])),
+                    ListTile(
+                        leading: Text('한 줄 소개'),
+                        title: Text(friendProfile!['status'])),
+                    ListTile(
+                      leading: Text('UID'),
+                      title: Text(friendProfile!['uid'],
+                          style: TextStyle(fontSize: 15)),
+                      trailing: IconButton(
+                        icon: Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                              ClipboardData(text: friendProfile!['uid']));
+                        },
+                      ),
+                    ),
+                    friendProfile!['schedule'] != null
+                        ? _TimetablePreview(List<Map<String, dynamic>>.from(
+                            friendProfile!['schedule']))
+                        : Container(),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget _TimetablePreview(List<Map<String, dynamic>> schedule) {
+    List<EventModel> eventList = [];
+    schedule.forEach((element) {
+      eventList.add(EventModel(
+        title: element['content'],
+        columnIndex: element['time']['column'],
+        rowIndex: element['time']['row'],
+        color: Color(element['color']),
+      ));
+    });
+
+    return AbsorbPointer(
+      absorbing: true,
+      child: Container(
+        width: 400,
+        height: 500,
+        child: TimeSchedulerTable(
+          cellHeight: 40,
+          cellWidth: 56,
+          columnTitles: const ["Mon", "Tue", "Wed", "Thur", "Fri"],
+          rowTitles: const [
+            '1교시',
+            '2교시',
+            '3교시',
+            '4교시',
+            '5교시',
+            '6교시',
+            '7교시',
+            '8교시',
+            '9교시',
+            '10교시',
+          ],
+          eventList: eventList,
+          isBack: false,
+          eventAlert: EventAlert(
+            alertTextController: TextEditingController(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MyClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTRB(0, 0, 300, 300);
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return false;
   }
 }
