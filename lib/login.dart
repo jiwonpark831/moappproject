@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             }
             FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).get().then((doc) async{
-              if(doc.exists){
+              if(!doc.exists){
               await FirebaseFirestore.instance
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
