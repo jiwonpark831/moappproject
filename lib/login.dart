@@ -25,9 +25,9 @@ class _LoginPageState extends State<LoginPage> {
                 MaterialPageRoute(builder: (context) => MainScreenPage()),
               );
             }
-            FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).get().then((doc){
+            FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).get().then((doc) async{
               if(doc.exists){
-              FirebaseFirestore.instance
+              await FirebaseFirestore.instance
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
                   .set(<String, dynamic>{
