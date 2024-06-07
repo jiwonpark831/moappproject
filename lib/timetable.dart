@@ -56,17 +56,19 @@ class _TimeTablePageState extends State<TimeTablePage> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context,appState, _) {
-        tmpuserSchedule=appState.currentuser!.schedule;
-        tmpuserSchedule?.forEach((element){
-          userSchedule.add(
-            EventModel(
-              title: element['content'],
-              columnIndex:element['time']['column'], // columnIndex is columnTitle's index (Monday : 0 or Day 1 : 0)
-              rowIndex: element['time']['row'], // rowIndex is rowTitle's index (08:00 : 0 or Time 1 : 0)
-              color: Color(element['color'])
-            ),
-          );
-        },);
+        if (appState.currentuser!.schedule !=null){
+          tmpuserSchedule=appState.currentuser!.schedule;
+          tmpuserSchedule?.forEach((element){
+            userSchedule.add(
+              EventModel(
+                title: element['content'],
+                columnIndex:element['time']['column'], // columnIndex is columnTitle's index (Monday : 0 or Day 1 : 0)
+                rowIndex: element['time']['row'], // rowIndex is rowTitle's index (08:00 : 0 or Time 1 : 0)
+                color: Color(element['color'])
+              ),
+            );
+          },);
+        }
         return Scaffold(
           appBar: AppBar(
           leading: IconButton(

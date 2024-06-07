@@ -158,20 +158,6 @@ class _SettingPageState extends State<SettingPage> {
                 Reference tmpref= FirebaseStorage.instance.ref().child('/${FirebaseAuth.instance.currentUser?.uid}.jpeg');
                 String _url= await tmpref.getDownloadURL();
 
-                await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update(<String, dynamic>{
-                  'name': name,
-                  'gender': gender,
-                  'major': major,
-                  'birth': birth,
-                  'status': status,
-                  // 'uid': FirebaseAuth.instance.currentUser!.uid,
-                  'imageURL': _url,
-                  // 'tagCheck': [false,false,false,false],
-                  // 'isGonggang': false,
-                  // 'schedule': 'this is a schedule by json format',
-                  // 'friendsList': ['asdfasdf'],
-                  // 'groupList': ['asdfasdf']
-                });
                 // debugPrint('$name / $price / $description / ${image!.path} / $_url');
                 
                 Navigator.pop(context);

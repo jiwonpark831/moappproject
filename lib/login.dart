@@ -25,12 +25,25 @@ class _LoginPageState extends State<LoginPage> {
                 MaterialPageRoute(builder: (context) => MainScreenPage()),
               );
             } else {
+            if (FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid) != null){
               FirebaseFirestore.instance
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
                   .set(<String, dynamic>{
-                'uid': FirebaseAuth.instance.currentUser!.uid,
-              });
+                    'name':'아무개',
+                    'gender': '남/여',
+                    'major':'전공',
+                    'birth':'1995.01.01',
+                    'status':'한 줄 소개',
+                    'uid': FirebaseAuth.instance.currentUser!.uid,
+                    'imageURL': 'https://firebasestorage.googleapis.com/v0/b/final-project-4d542.appspot.com/o/default.jpg?alt=media&token=06ed8ea3-58a5-4787-b3a0-f44826650e29',
+                    'tagCheck': [false,false,false,false],
+                    'isGonggang':false,
+                    // 'schedule':
+                    // 'friendsList':
+                });
+              }
+
             }
           },
           icon: Image.asset(

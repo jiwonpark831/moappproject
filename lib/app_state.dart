@@ -85,7 +85,6 @@ class ApplicationState extends ChangeNotifier {
             tagCheck: List.from(snapshot.data()!['tagCheck']),
             isGonggang: snapshot.data()!['isGonggang'] as bool,
             schedule: List.from(snapshot.data()!['schedule']),
-            // schedule: ['asdf'],
             friendList: List.from(snapshot.data()!['friendsList']),
             groupList: List.from(snapshot.data()!['groupList'])
           );
