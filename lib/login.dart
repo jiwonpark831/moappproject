@@ -24,8 +24,9 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => MainScreenPage()),
               );
-            } else {
-            if (FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid) != null){
+            }
+            FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).get().then((doc){
+              if(doc.exists){
               FirebaseFirestore.instance
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -42,9 +43,10 @@ class _LoginPageState extends State<LoginPage> {
                     // 'schedule':
                     // 'friendsList':
                 });
+              
               }
-
             }
+            );
           },
           icon: Image.asset(
             'assets/googlesingin.png',
