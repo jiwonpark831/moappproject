@@ -40,8 +40,9 @@ class _LoginPageState extends State<LoginPage> {
                     'imageURL': 'https://firebasestorage.googleapis.com/v0/b/final-project-4d542.appspot.com/o/default.jpg?alt=media&token=06ed8ea3-58a5-4787-b3a0-f44826650e29',
                     'tagCheck': [false,false,false,false],
                     'isGonggang':false,
-                    // 'schedule':
-                    // 'friendsList':
+                    'schedule': [],
+                    'friendsList':[],
+                    'groupList':[]
                 });
               
               }
