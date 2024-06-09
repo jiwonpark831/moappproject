@@ -54,16 +54,11 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _buildPhotoArea(String imagepath) {
-    return imagepath != null
-        ? ClipOval(
+    return ClipOval(
           child: Container(
             height: 300,
             // child: Image.file(File(image!.path)),
                 child: Image.network(imagepath)
-          ))
-        : ClipOval(child: Container(
-            height: 300,
-            child: Image.network('http://handong.edu/site/handong/res/img/logo.png')
           ));
   }
   Widget _buildButton() {
@@ -146,6 +141,7 @@ class _SettingPageState extends State<SettingPage> {
                 tmp['color']=element.color!.value;
                 newuserSchedule!.add(tmp);
               });
+
               FirebaseFirestore.instance
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -154,10 +150,24 @@ class _SettingPageState extends State<SettingPage> {
               });
 
                 File file = File(imagePath);
-                await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}.jpeg').putFile(file);
+                // await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}.jpeg').putFile(file);
                 Reference tmpref= FirebaseStorage.instance.ref().child('/${FirebaseAuth.instance.currentUser?.uid}.jpeg');
                 String _url= await tmpref.getDownloadURL();
 
+                await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update(<String, dynamic>{
+                  'name': name,
+                  'gender': gender,
+                  'major': major,
+                  'birth': birth,
+                  'status': status,
+                  // 'uid': FirebaseAuth.instance.currentUser!.uid,
+                  'imageURL': _url,
+                  // 'tagCheck': [false,false,false,false],
+                  // 'isGonggang': false,
+                  // 'schedule': 'this is a schedule by json format',
+                  // 'friendsList': ['asdfasdf'],
+                  // 'groupList': ['asdfasdf']
+                });
                 // debugPrint('$name / $price / $description / ${image!.path} / $_url');
                 
                 Navigator.pop(context);

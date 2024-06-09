@@ -5,6 +5,7 @@ import "package:moappproject/setting.dart";
 import "home.dart";
 import "profile.dart";
 import "friend.dart";
+import "map.dart";
 
 
 class MainScreenPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   final List<Widget> _pages = [
     HomePage(),
     FriendPage(),
+    GoogleMapPage(),
     //ChatScreen(),
     ChatroomPage(),
     ProfilePage(),
@@ -39,6 +41,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: 'home'),
            BottomNavigationBarItem(icon: Icon(Icons.people, size: 30,), label: 'friend'),
+           BottomNavigationBarItem(icon: Icon(Icons.map, size: 30,), label: 'map'),
           BottomNavigationBarItem(icon: Icon(Icons.message, size: 30,), label: 'message'),
            BottomNavigationBarItem(icon: Icon(Icons.settings, size: 30,), label: 'setting'),
         ],

@@ -25,16 +25,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker imagePicker = ImagePicker();
 
   Widget _buildPhotoArea(String imagepath) {
-    return imagepath != null
-        ? ClipOval(
-              clipper: MyClipper(),
-              child: Container(height: 300, child: Image.network(imagepath)))
-        : ClipOval(
-            clipper: MyClipper(),
-            child: Container(
-                height: 300,
-                child: Image.network(
-                    'http://handong.edu/site/handong/res/img/logo.png')));
+    return ClipOval(
+      clipper:MyClipper(),
+      child: Container( width:300, height: 300,child: Image.network(imagepath,fit:BoxFit.cover)));
+       
   }
 
   @override

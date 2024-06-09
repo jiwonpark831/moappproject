@@ -16,6 +16,7 @@ class _FriendPageState extends State<FriendPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<String> friends = [];
   final _uidcontroller = TextEditingController();
+  Map<String,String> friendsname={};
 
   @override
   void initState() {
@@ -31,7 +32,21 @@ class _FriendPageState extends State<FriendPage> {
     if (doc.data() != null && doc.get('friendsList') != null) {
       friends = List<String>.from(doc.get('friendsList'));
     }
+    friends.forEach((element) async {
+      var _friend = await _firestore.collection('user').doc(element).get();
+      friendsname[_friend.get('uid')] = _friend.get('name');
+    });
     setState(() {});
+  }
+
+  getFriendName(String friendUID) async {
+    var doc = await _firestore
+        .collection('user')
+        .doc(friendUID)
+        .get();
+    setState(() {
+    friendsname[doc.get('uid')]= doc.get('name');
+    });
   }
 
   void showAlertDialog(String message) {
@@ -203,7 +218,7 @@ class _FriendPageState extends State<FriendPage> {
               child: ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(left: 15, bottom: 15),
-                  child: Text(friends[index]),
+                  child: Text('${friendsname[friends[index]]}'),
                 ),
                 subtitle: Divider(
                   indent: 10,
@@ -218,6 +233,12 @@ class _FriendPageState extends State<FriendPage> {
                     ),
                   );
                 },
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed:((){
+                    
+                  })
+                ),
               ),
             ),
           );
@@ -255,17 +276,11 @@ class _FriendProfilesState extends State<FriendProfiles> {
     }
   }
 
-  Widget _ProfilePic(String? imageurl) {
-    return imageurl != null
-        ? ClipOval(
-            clipper: MyClipper(),
-            child: Container(height: 300, child: Image.network(imageurl)))
-        : ClipOval(
-            clipper: MyClipper(),
-            child: Container(
-                height: 300,
-                child: Image.network(
-                    'http://handong.edu/site/handong/res/img/logo.png')));
+  Widget _ProfilePic(String imageurl) {
+    return ClipOval(
+      clipper:MyClipper(),
+      child: Container( width:300, height: 300,child: Image.network(imageurl,fit:BoxFit.fill)));
+        
   }
 
   @override
