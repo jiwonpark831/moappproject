@@ -14,6 +14,7 @@ class ChatroomPage extends StatefulWidget {
 class _ChatroomPageState extends State<ChatroomPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<String> chatroomNames = [];
+  Map<String, String> friendsname = {};
 
   @override
   void initState() {
@@ -29,7 +30,20 @@ class _ChatroomPageState extends State<ChatroomPage> {
     if (doc.data() != null && doc.get('friendsList') != null) {
       chatroomNames = List<String>.from(doc.get('friendsList'));
     }
+    List<Future<void>> friendFetchFutures = chatroomNames.map((element) async {
+      var _friend = await _firestore.collection('user').doc(element).get();
+      friendsname[_friend.get('uid')] = _friend.get('name');
+    }).toList();
+
+    await Future.wait(friendFetchFutures);
     setState(() {});
+  }
+
+  getFriendName(String friendUID) async {
+    var doc = await _firestore.collection('user').doc(friendUID).get();
+    setState(() {
+      friendsname[doc.get('uid')] = doc.get('name');
+    });
   }
 
   @override
@@ -53,7 +67,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
               child: ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(left: 15, bottom: 15),
-                  child: Text(chatroomNames[index]),
+                  child: Text('${friendsname[chatroomNames[index]]}'),
                 ),
                 subtitle: Divider(
                   indent: 10,
