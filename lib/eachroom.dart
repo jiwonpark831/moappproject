@@ -21,6 +21,7 @@ class _EachChatroomState extends State<EachChatroom> {
   void initState() {
     super.initState();
     ShowFriendProfile();
+    ReadMessage();
   }
 
   Future<void> ShowFriendProfile() async {
@@ -30,6 +31,21 @@ class _EachChatroomState extends State<EachChatroom> {
       setState(() {
         friendProfile = doc.data() as Map<String, dynamic>?;
       });
+    }
+  }
+
+  void ReadMessage() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final messagesQuery = _firestore
+        .collection('user')
+        .doc(userId)
+        .collection(widget.friendUid)
+        .where('isRead', isEqualTo: false);
+
+    final messages = await messagesQuery.get();
+
+    for (var message in messages.docs) {
+      await message.reference.update({'isRead': true});
     }
   }
 

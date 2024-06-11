@@ -27,6 +27,7 @@ class _NewMessageState extends State<NewMessage> {
       'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': userId,
+      'isRead': false,
     });
     await FirebaseFirestore.instance
         .collection('user')
@@ -36,6 +37,7 @@ class _NewMessageState extends State<NewMessage> {
       'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': userId,
+      'isRead': false,
     });
     _controller.clear();
   }
