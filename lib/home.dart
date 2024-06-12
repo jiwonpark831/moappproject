@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       friendList = List<String>.from(doc['friendsList']);
     });
+
   }
 
   Future<void> getunFriendList() async {

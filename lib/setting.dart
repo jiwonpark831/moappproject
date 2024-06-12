@@ -44,7 +44,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Future getImage(ImageSource imageSource) async {
     
-    final XFile? pickedFile = await imagePicker.pickImage(source: imageSource);
+    final XFile? pickedFile = await imagePicker.pickImage(source: imageSource,maxHeight: 480,maxWidth:640,imageQuality: 50);
     if (pickedFile != null) {
       setState(() {
         image = XFile(pickedFile.path); 
@@ -150,7 +150,7 @@ class _SettingPageState extends State<SettingPage> {
               });
 
                 File file = File(imagePath);
-                // await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}.jpeg').putFile(file);
+                await FirebaseStorage.instance.ref('/${FirebaseAuth.instance.currentUser?.uid}.jpeg').putFile(file);
                 Reference tmpref= FirebaseStorage.instance.ref().child('/${FirebaseAuth.instance.currentUser?.uid}.jpeg');
                 String _url= await tmpref.getDownloadURL();
 

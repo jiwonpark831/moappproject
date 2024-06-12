@@ -46,13 +46,6 @@ class _FriendPageState extends State<FriendPage> {
     setState(() {});
   }
 
-  getFriendName(String friendUID) async {
-    var doc = await _firestore.collection('user').doc(friendUID).get();
-    setState(() {
-      friendsname[doc.get('uid')] = doc.get('name');
-    });
-  }
-
   void showAlertDialog(String message) {
     showDialog(
       context: context,

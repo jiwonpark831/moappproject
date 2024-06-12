@@ -7,14 +7,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'package:location/location.dart';
+
 import 'dart:async';                   // new
 import 'user.dart';
 
 import 'firebase_options.dart';
 
+
+
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
+    Timer.periodic(Duration(seconds:5),(timer) async {
+      await uploadLocation();
+      debugPrint('ok');
+    });
   }
   Reference get firebasestorage => FirebaseStorage.instance.ref();
 
@@ -30,18 +39,42 @@ class ApplicationState extends ChangeNotifier {
 
   // List<Product> wishlist = [];
   List<String> wishlistcheck=[];
+  
+  uploadLocation() async {
+    Location location = new Location();
 
-  // bool checkwishlist(String productID){
-  //   if(wishlistcheck.contains(productID)){
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
 
-  Future<void> toggleGonggang()async {
-    // debugPrint('${currentuser?.isGonggang}');
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    debugPrint('here');
+
+
+    _locationData = await location.getLocation();
+    
+    // location.getLocation().then((value){
+    //   debugPrint('${value}');
+    // });
+    // debugPrint('here');
+    // debugPrint('${_locationData.latitude} / ${_locationData.longitude}');
+    // await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update(<String, dynamic>{
+    //   'location': [_locationData.latitude,_locationData.longitude],
+    // });
   }
 
   Future<void> init() async {

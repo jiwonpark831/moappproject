@@ -47,6 +47,7 @@ class _EachChatroomState extends State<EachChatroom> {
     for (var message in messages.docs) {
       await message.reference.update({'isRead': true});
     }
+    setState((){});
   }
 
   @override
