@@ -118,93 +118,108 @@ class _FriendPageState extends State<FriendPage> {
         friends = appState.currentuser!.friendList;
       }
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(
-            '내 친구',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.white,
+          title: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              '내 친구',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+            ),
           ),
           centerTitle: false,
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SingleChildScrollView(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
-                            color: Colors.white),
-                        height: 500,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 35, left: 30),
-                              child: Text(
-                                '친구 추가',
+            Padding(
+              padding: const EdgeInsets.only(right: 25),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0, backgroundColor: Color(0xffFFEAC7)),
+                onPressed: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.white,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 72),
-                                      child: Container(
-                                        height: 60,
-                                        width: 250,
-                                        child: TextField(
-                                          controller: _uidcontroller,
-                                          decoration: InputDecoration(
-                                            hintText: '친구의 UID를 입력하세요',
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 24),
-                                      child: TextButton(
-                                        onPressed: AddFriend,
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          minimumSize: const Size(250, 38),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                        ),
-                                        child: Text('추가'),
-                                      ),
-                                    ),
-                                  ],
+                              color: Colors.white),
+                          height: 500,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 35, left: 30),
+                                child: Text(
+                                  '친구 추가',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 72),
+                                        child: Container(
+                                          height: 60,
+                                          width: 250,
+                                          child: TextField(
+                                            controller: _uidcontroller,
+                                            decoration: InputDecoration(
+                                              hintText: '친구의 UID를 입력하세요',
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 24),
+                                        child: ElevatedButton(
+                                          onPressed: AddFriend,
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor: Color(0xffFFEAC7),
+                                          ),
+                                          child: Text(
+                                            '추가',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Text("친구 추가"),
+                      );
+                    },
+                  );
+                },
+                child: Text("친구 추가", style: TextStyle(color: Colors.grey)),
+              ),
             ),
           ],
         ),
@@ -212,13 +227,13 @@ class _FriendPageState extends State<FriendPage> {
           itemCount: friends.length,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(top: 7),
+              padding: const EdgeInsets.only(top: 20),
               child: Container(
                 width: 320,
                 height: 60,
                 child: ListTile(
                   title: Padding(
-                    padding: const EdgeInsets.only(left: 15, bottom: 15),
+                    padding: const EdgeInsets.only(left: 25, bottom: 15),
                     child: Text('${friendsname[friends[index]]}'),
                   ),
                   subtitle: Divider(
@@ -303,7 +318,9 @@ class _FriendProfilesState extends State<FriendProfiles> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title:
             Text(friendProfile != null ? friendProfile!['name'] : 'loading..'),
       ),
@@ -313,42 +330,80 @@ class _FriendProfilesState extends State<FriendProfiles> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 40),
                     _ProfilePic(friendProfile!['imageURL']),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     ListTile(
-                        leading: const Text('이름'),
-                        title: Text(friendProfile!['name'])),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Text('이름'),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(friendProfile!['name']),
+                        )),
                     ListTile(
-                        leading: Text('성별'),
-                        title: Text(friendProfile!['gender'])),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Text('성별'),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(friendProfile!['gender']),
+                        )),
                     ListTile(
-                        leading: Text('전공'),
-                        title: Text(friendProfile!['major'])),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Text('전공'),
+                        ),
+                        title: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(friendProfile!['major']),
+                        )),
                     ListTile(
-                        leading: Text('생년월일'),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Text('생년월일'),
+                        ),
                         title: Text(friendProfile!['birth'])),
                     ListTile(
-                        leading: Text('한 줄 소개'),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Text('한줄소개'),
+                        ),
                         title: Text(friendProfile!['status'])),
                     ListTile(
-                      leading: Text('UID'),
-                      title: Text(friendProfile!['uid'],
-                          style: TextStyle(fontSize: 15)),
+                      leading: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text('UId'),
+                      ),
+                      title: Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          friendProfile!['uid'],
+                        ),
+                      ),
                       trailing: IconButton(
                         icon: Icon(Icons.copy),
                         onPressed: () {
                           Clipboard.setData(
                               ClipboardData(text: friendProfile!['uid']));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('클립보드에 복사되었습니다'),
+                            duration: Duration(milliseconds: 1000),
+                          ));
                         },
                       ),
                     ),
+                    const SizedBox(height: 10),
                     friendProfile!['schedule'] != null
                         ? _TimetablePreview(List<Map<String, dynamic>>.from(
                             friendProfile!['schedule']))
                         : Container(),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 40),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffFFEAC7)),
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -374,7 +429,10 @@ class _FriendProfilesState extends State<FriendProfiles> {
                             },
                           );
                         },
-                        child: Text('친구 삭제'))
+                        child: Text(
+                          '친구 삭제',
+                          style: TextStyle(color: Colors.grey),
+                        ))
                   ],
                 ),
               ),
