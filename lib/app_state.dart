@@ -33,6 +33,10 @@ class ApplicationState extends ChangeNotifier {
 
   StreamSubscription<DocumentSnapshot>? _userSubscription;
 
+  StreamSubscription<LocationData>? _locationSubscription;
+  final Location location = new Location();
+  LocationData? _locationData;
+
   CurrentUser? currentuser;
   // List<Product> _productList = [];
   // List<Product> get productList => _productList;
@@ -41,11 +45,23 @@ class ApplicationState extends ChangeNotifier {
   List<String> wishlistcheck=[];
   
   uploadLocation() async {
-    Location location = new Location();
+
+    debugPrint('${_locationData!.latitude} / ${_locationData!.longitude}');
+    
+    // location.getLocation().then((value){
+    //   debugPrint('${value}');
+    // });
+    // debugPrint('here');
+    // debugPrint('${_locationData.latitude} / ${_locationData.longitude}');
+    // await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update(<String, dynamic>{
+    //   'location': [_locationData.latitude,_locationData.longitude],
+    // });
+  }
+
+  Future<void> init() async {
 
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-    LocationData _locationData;
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -62,22 +78,10 @@ class ApplicationState extends ChangeNotifier {
         return;
       }
     }
-    debugPrint('here');
-
-
-    _locationData = await location.getLocation();
-    
-    // location.getLocation().then((value){
-    //   debugPrint('${value}');
-    // });
-    // debugPrint('here');
-    // debugPrint('${_locationData.latitude} / ${_locationData.longitude}');
-    // await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).update(<String, dynamic>{
-    //   'location': [_locationData.latitude,_locationData.longitude],
-    // });
-  }
-
-  Future<void> init() async {
+    // _locationData= await location.getLocation();
+    location.onLocationChanged.listen((LocationData currentLocation){
+      _locationData=currentLocation;
+    });
     
     FirebaseFirestore.instance
         .collection('user')
