@@ -50,7 +50,9 @@ class _EachChatroomState extends State<EachChatroom> {
         await message.reference.update({'isRead': true});
       }
     }
-    setState((){});
+    if (this.mounted){
+      setState((){});
+    }
   }
 
   @override
