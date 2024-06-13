@@ -15,8 +15,8 @@ class _ChatroomPageState extends State<ChatroomPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<String> chatroomNames = [];
   Map<String, String> friendsname = {};
-  Map<String,String> friendsprofile={};
-  Map<String,int> isReadCount={};
+  Map<String, String> friendsprofile = {};
+  Map<String, int> isReadCount = {};
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
     if (doc.data() != null && doc.get('friendsList') != null) {
       chatroomNames = List<String>.from(doc.get('friendsList'));
     }
-    
+
     final messagesQuery = _firestore
         .collection('user')
         .doc(FirebaseAuth.instance.currentUser!.uid);
@@ -41,13 +41,16 @@ class _ChatroomPageState extends State<ChatroomPage> {
       var _friend = await _firestore.collection('user').doc(element).get();
       friendsname[_friend.get('uid')] = _friend.get('name');
       friendsprofile[_friend.get('uid')] = _friend.get('imageURL');
-      var tmp = await messagesQuery.collection(element).where('isRead',isEqualTo:false).get();
+      var tmp = await messagesQuery
+          .collection(element)
+          .where('isRead', isEqualTo: false)
+          .get();
       isReadCount[_friend.get('uid')] = tmp.size;
     }).toList();
 
     await Future.wait(friendFetchFutures);
-    if (this.mounted){
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
     }
   }
 
@@ -73,35 +76,38 @@ class _ChatroomPageState extends State<ChatroomPage> {
         itemCount: chatroomNames.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(top: 7),
-            child: Column(children:[
-              Container(
-              width: 450,
-              height: 60,
-              child: ListTile(
-                leading: Image.network('${friendsprofile[chatroomNames[index]]}'),
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 15, bottom: 15),
-                  child: Text('${friendsname[chatroomNames[index]]}'),
-                ),
-                trailing: Text('${isReadCount[chatroomNames[index]]}'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EachChatroom(chatroomNames[index]),
+              padding: const EdgeInsets.only(top: 7),
+              child: Column(children: [
+                Container(
+                  width: 450,
+                  height: 60,
+                  child: ListTile(
+                    leading: Image.network(
+                        '${friendsprofile[chatroomNames[index]]}'),
+                    title: Padding(
+                      padding: const EdgeInsets.only(left: 15, bottom: 15),
+                      child: Text('${friendsname[chatroomNames[index]]}'),
                     ),
-                  );
-                },
-              ),
-            ),
-            Divider(
-              indent: 10,
-              endIndent: 10,
-              thickness: 1,
-            ),])
-
-          );
+                    trailing: isReadCount[chatroomNames[index]] != 0
+                        ? Text('${isReadCount[chatroomNames[index]]}')
+                        : Text(' '),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EachChatroom(chatroomNames[index]),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Divider(
+                  indent: 10,
+                  endIndent: 10,
+                  thickness: 1,
+                ),
+              ]));
         },
       ),
     );
