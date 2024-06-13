@@ -20,10 +20,8 @@ import 'firebase_options.dart';
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
-    Timer.periodic(Duration(seconds:5),(timer) async {
-      await uploadLocation();
-      debugPrint('ok');
-    });
+    initLocation();
+    uploadLocation();
   }
   Reference get firebasestorage => FirebaseStorage.instance.ref();
 
@@ -33,7 +31,6 @@ class ApplicationState extends ChangeNotifier {
 
   StreamSubscription<DocumentSnapshot>? _userSubscription;
 
-  StreamSubscription<LocationData>? _locationSubscription;
   final Location location = new Location();
   LocationData? _locationData;
 
@@ -44,10 +41,12 @@ class ApplicationState extends ChangeNotifier {
   // List<Product> wishlist = [];
   List<String> wishlistcheck=[];
   
-  uploadLocation() async {
-
-    debugPrint('${_locationData!.latitude} / ${_locationData!.longitude}');
-    
+  uploadLocation() {
+  Timer.periodic(Duration(seconds:5),(timer) {
+    if (_locationData != null){
+      // debugPrint('${_locationData!.latitude} / ${_locationData!.longitude}');
+    }
+  });
     // location.getLocation().then((value){
     //   debugPrint('${value}');
     // });
@@ -58,8 +57,7 @@ class ApplicationState extends ChangeNotifier {
     // });
   }
 
-  Future<void> init() async {
-
+  initLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
@@ -79,10 +77,16 @@ class ApplicationState extends ChangeNotifier {
       }
     }
     // _locationData= await location.getLocation();
+
     location.onLocationChanged.listen((LocationData currentLocation){
       _locationData=currentLocation;
     });
-    
+    debugPrint('location ok');
+    debugPrint('${_locationData==null}');
+  }
+
+  Future<void> init() async {
+
     FirebaseFirestore.instance
         .collection('user')
         .snapshots()
@@ -96,20 +100,6 @@ class ApplicationState extends ChangeNotifier {
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots()
       .listen((snapshot) {
-      // if (snapshot.data()!['name'] != null
-      // && snapshot.data()!['gender'] != null
-      // && snapshot.data()!['major'] != null
-      // && snapshot.data()!['birth'] != null
-      // && snapshot.data()!['status'] != null
-      // && snapshot.data()!['uid'] != null
-      // && snapshot.data()!['imageURL'] != null
-      // && snapshot.data()!['tagCheck'] != null
-      // && snapshot.data()!['isGonggang'] != null
-      // && snapshot.data()!['schedule'] != null
-      // && snapshot.data()!['friendsList'] != null
-      // && snapshot.data()!['groupList'] != null){
-        // debugPrint('${snapshot.data()!['schedule']}');
-        // debugPrint('${currentuser!.schedule}');
         currentuser=
           CurrentUser(
             name: snapshot.data()!['name'] as String,

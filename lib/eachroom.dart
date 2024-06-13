@@ -45,7 +45,10 @@ class _EachChatroomState extends State<EachChatroom> {
     final messages = await messagesQuery.get();
 
     for (var message in messages.docs) {
-      await message.reference.update({'isRead': true});
+      var tmp = await message.reference.get();
+      if (tmp['userID']!=FirebaseAuth.instance.currentUser!.uid){
+        await message.reference.update({'isRead': true});
+      }
     }
     setState((){});
   }

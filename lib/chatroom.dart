@@ -45,7 +45,14 @@ class _ChatroomPageState extends State<ChatroomPage> {
           .collection(element)
           .where('isRead', isEqualTo: false)
           .get();
-      isReadCount[_friend.get('uid')] = tmp.size;
+      int count =0;
+      for (var message in tmp.docs) {
+        var tmp = await message.reference.get();
+        if (tmp['userID']!=FirebaseAuth.instance.currentUser!.uid){  
+          count++;
+        }
+      }
+      isReadCount[_friend.get('uid')] = count;
     }).toList();
 
     await Future.wait(friendFetchFutures);
@@ -89,8 +96,13 @@ class _ChatroomPageState extends State<ChatroomPage> {
                       child: Text('${friendsname[chatroomNames[index]]}'),
                     ),
                     trailing: isReadCount[chatroomNames[index]] != 0
-                        ? Text('${isReadCount[chatroomNames[index]]}')
-                        : Text(' '),
+                        ? Container(
+                          alignment:Alignment.center,
+                          width:20,
+                          height:20,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color:Colors.red),
+                          child:Text('${isReadCount[chatroomNames[index]]}',style: TextStyle(color:Colors.white),))
+                        : null,
                     onTap: () {
                       Navigator.push(
                         context,

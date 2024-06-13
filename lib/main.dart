@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import 'MainScreen.dart';
 import 'firebase_options.dart';
 
+import 'dart:async';             
+
 import 'login.dart';
+
 import 'app_state.dart';
 
 void main() async {
@@ -12,8 +15,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // ApplicationState().init();
-  // runApp(MyApp());
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
     builder: ((context, child) => MyApp()),
