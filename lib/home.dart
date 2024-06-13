@@ -23,8 +23,7 @@ class _HomePageState extends State<HomePage> {
   late bool mytag4 = false;
 
   List<String> friendList = [];
-  List<String> unfriendList=[];
-  
+  List<String> unfriendList = [];
 
   @override
   void initState() {
@@ -41,11 +40,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       friendList = List<String>.from(doc['friendsList']);
     });
-
   }
 
   Future<void> getunFriendList() async {
-    List<String> tmp=[];
+    List<String> tmp = [];
     // var doc = await FirebaseFirestore.instance
     //     .collection('user')
     //     .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -55,18 +53,18 @@ class _HomePageState extends State<HomePage> {
         .collection('user')
         .snapshots()
         .listen((snapshot) {
-          tmp.clear();
-          snapshot.docs.forEach((element){
-            if (!friendList.contains(element.id) && element.id != FirebaseAuth.instance.currentUser!.uid){
-              tmp.add(element.id);
-            }
-          });
+      tmp.clear();
+      snapshot.docs.forEach((element) {
+        if (!friendList.contains(element.id) &&
+            element.id != FirebaseAuth.instance.currentUser!.uid) {
+          tmp.add(element.id);
         }
-      );
+      });
+    });
     // unfriendList.shuffle();
     // unfriendList.getRange(0,2);
     setState(() {
-      unfriendList=tmp;
+      unfriendList = tmp;
       // debugPrint('${tmp.length}');
       // debugPrint('${unfriendList.length}');
     });
@@ -84,6 +82,7 @@ class _HomePageState extends State<HomePage> {
         debugPrint('${appState.currentuser!.schedule}');
       }
       return Scaffold(
+        backgroundColor: Colors.white,
         body: Column(children: [
           Padding(
             padding: const EdgeInsets.only(top: 100),
@@ -265,62 +264,65 @@ class _HomePageState extends State<HomePage> {
                           isFriendGonggang || friendTagCheck.contains(true);
                       if (showCard) {
                         return InkWell(
-                          onTap:((){
+                            onTap: (() {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => FriendProfiles(friendList[index]),
+                                  builder: (context) =>
+                                      FriendProfiles(friendList[index]),
                                 ),
                               );
-                          }),
-                          child: Card(
-                          elevation: 0,
-                          child: Container(
-                            color: Color(0xffCCF9EE),
-                            width: 150,
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      NetworkImage(userData['imageURL']),
-                                ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  userData['name'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Row(
+                            }),
+                            child: Card(
+                              elevation: 0,
+                              child: Container(
+                                color: Color(0xffCCF9EE),
+                                width: 150,
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    if (friendTagCheck[0])
-                                      Container(
-                                        child: Text("#공부해요"),
-                                        color: Color(0xffFFFFFF),
-                                      ),
-                                    if (friendTagCheck[1])
-                                      Container(
-                                        child: Text("#밥먹어요"),
-                                        color: Color(0xffFFFFFF),
-                                      ),
-                                    if (friendTagCheck[2])
-                                      Container(
-                                        child: Text("#한한해요"),
-                                        color: Color(0xffFFFFFF),
-                                      ),
-                                    if (friendTagCheck[3])
-                                      Container(
-                                        child: Text("#일단만나요"),
-                                        color: Color(0xffFFFFFF),
-                                      ),
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          NetworkImage(userData['imageURL']),
+                                    ),
+                                    SizedBox(height: 8.0),
+                                    Text(
+                                      userData['name'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        if (friendTagCheck[0])
+                                          Container(
+                                            child: Text("#공부해요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[1])
+                                          Container(
+                                            child: Text("#밥먹어요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[2])
+                                          Container(
+                                            child: Text("#한한해요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[3])
+                                          Container(
+                                            child: Text("#일단만나요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ));
+                              ),
+                            ));
                       } else {
                         return Container();
                       }
@@ -354,97 +356,100 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           Container(
-              width: 400,
-              height: 150,
-              decoration: BoxDecoration(color: Color(0xffFEDFAA)),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: unfriendList.length,
-                itemBuilder: (context, index) {
-                  debugPrint('${unfriendList.length}');
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection('user')
-                        .doc(unfriendList[index])
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasData && snapshot.data != null) {
-                        var userData = snapshot.data!;
-                        bool isFriendGonggang = userData['isGonggang'] ?? false;
-                        List<bool> friendTagCheck =
-                            List<bool>.from(userData['tagCheck']);
-                        bool showCard =
-                            isFriendGonggang || friendTagCheck.contains(true);
-                        if (showCard) {
-                          return InkWell(
-                            onTap:((){
+            width: 400,
+            height: 150,
+            decoration: BoxDecoration(color: Color(0xffFEDFAA)),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: unfriendList.length,
+              itemBuilder: (context, index) {
+                debugPrint('${unfriendList.length}');
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(unfriendList[index])
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      var userData = snapshot.data!;
+                      bool isFriendGonggang = userData['isGonggang'] ?? false;
+                      List<bool> friendTagCheck =
+                          List<bool>.from(userData['tagCheck']);
+                      bool showCard =
+                          isFriendGonggang || friendTagCheck.contains(true);
+                      if (showCard) {
+                        return InkWell(
+                            onTap: (() {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => FriendProfiles(unfriendList[index]),
+                                  builder: (context) =>
+                                      FriendProfiles(unfriendList[index]),
                                 ),
                               );
                             }),
                             child: Card(
-                            elevation: 0,
-                            child: Container(
-                              color: Color(0xffFEDFAA),
-                              width: 150,
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        NetworkImage(userData['imageURL']),
-                                  ),
-                                  SizedBox(height: 8.0),
-                                  Text(
-                                    userData['name'],
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      if (friendTagCheck[0])
-                                        Container(
-                                          child: Text("#공부해요"),
-                                          color: Color(0xffFFFFFF),
-                                        ),
-                                      if (friendTagCheck[1])
-                                        Container(
-                                          child: Text("#밥먹어요"),
-                                          color: Color(0xffFFFFFF),
-                                        ),
-                                      if (friendTagCheck[2])
-                                        Container(
-                                          child: Text("#한한해요"),
-                                          color: Color(0xffFFFFFF),
-                                        ),
-                                      if (friendTagCheck[3])
-                                        Container(
-                                          child: Text("#일단만나요"),
-                                          color: Color(0xffFFFFFF),
-                                        ),
-                                    ],
-                                  ),
-                                ],
+                              elevation: 0,
+                              child: Container(
+                                color: Color(0xffFEDFAA),
+                                width: 150,
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          NetworkImage(userData['imageURL']),
+                                    ),
+                                    SizedBox(height: 8.0),
+                                    Text(
+                                      userData['name'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        if (friendTagCheck[0])
+                                          Container(
+                                            child: Text("#공부해요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[1])
+                                          Container(
+                                            child: Text("#밥먹어요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[2])
+                                          Container(
+                                            child: Text("#한한해요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                        if (friendTagCheck[3])
+                                          Container(
+                                            child: Text("#일단만나요"),
+                                            color: Color(0xffFFFFFF),
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ));
-                        } else {
-                          return Container();
-                        }
+                            ));
                       } else {
-                        return Text(' ');
+                        return Container();
                       }
-                    },
-                  );
-                },
-              ),
+                    } else {
+                      return Text(' ');
+                    }
+                  },
+                );
+              },
+            ),
           )
         ]),
       );
